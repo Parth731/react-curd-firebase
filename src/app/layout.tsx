@@ -1,6 +1,12 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import {
+  DarkModeContext,
+  DarkModeContextProvider,
+} from "@/context/darkModeContext";
+import { AuthContextProvider } from "@/context/AuthContext";
+import { useContext } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,7 +22,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <DarkModeContextProvider>
+          <AuthContextProvider>{children}</AuthContextProvider>
+        </DarkModeContextProvider>
+      </body>
     </html>
   );
 }
