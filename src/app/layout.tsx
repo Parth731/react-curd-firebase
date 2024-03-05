@@ -7,6 +7,7 @@ import {
 } from "@/context/darkModeContext";
 import { AuthContextProvider } from "@/context/AuthContext";
 import { useContext } from "react";
+import { Toaster } from "react-hot-toast";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,6 +25,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <DarkModeContextProvider>
+          <Toaster position="top-center" />
           <AuthContextProvider>{children}</AuthContextProvider>
         </DarkModeContextProvider>
       </body>

@@ -6,8 +6,20 @@ import Widget from "@/components/widget/Widget";
 import Featured from "@/components/featured/Featured";
 import Chart from "@/components/chart/chart";
 import List from "@/components/table/Table";
+import { useEffect } from "react";
+import { getToken, onMessage } from "firebase/messaging";
+import { generatedToken, messaging } from "@/config/firebase";
+import toast, { Toaster } from "react-hot-toast";
 
 const Home = () => {
+  useEffect(() => {
+    generatedToken();
+    onMessage(messaging, (payload) => {
+      console.log(payload);
+      toast(payload?.notification?.body || "success");
+    });
+  }, []);
+
   return (
     <div className="home">
       <Sidebar />

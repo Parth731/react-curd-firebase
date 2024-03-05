@@ -8,10 +8,48 @@ import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNone
 import ChatBubbleOutlineOutlinedIcon from "@mui/icons-material/ChatBubbleOutlineOutlined";
 import ListOutlinedIcon from "@mui/icons-material/ListOutlined";
 import { DarkModeContext } from "../../context/darkModeContext";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
+import { getToken } from "firebase/messaging";
+import { generatedToken, messaging } from "@/config/firebase";
+import axios from "axios";
+import { AuthContext } from "@/context/AuthContext";
+// import Notification from "../Notification";
 
 const Navbar = () => {
   const { dispatch }: any = useContext(DarkModeContext);
+  const { currentUser }: any = useContext(AuthContext);
+
+  console.log(currentUser?.stsTokenManager?.accessToken);
+
+  const handleSendNotification = async () => {
+    const token = await generatedToken();
+    console.log(token);
+
+    const response = await axios.post(
+      `https://fcm.googleapis.com//v1/projects/next-curd-5153c/messages:send`,
+      {
+        message: {
+          token: token,
+          notification: {
+            title: "Notification Title",
+            body: "Notofication body",
+          },
+          webpush: {
+            fcm_options: {
+              link: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQPuY60qCZAjLrnmd-mWjQNqWTXCg5chh4vmSzo1zR3e9wPoJbnIG9TYJXNQkMdepq3_4o&usqp=CAU",
+            },
+          },
+        },
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${currentUser?.stsTokenManager?.accessToken}`,
+        },
+      }
+    );
+    console.log(response);
+  };
 
   return (
     <div className="navbar">
@@ -34,9 +72,10 @@ const Navbar = () => {
           <div className="item">
             <FullscreenExitOutlinedIcon className="icon" />
           </div>
-          <div className="item">
+          <div className="item" onClick={() => handleSendNotification()}>
             <NotificationsNoneOutlinedIcon className="icon" />
-            <div className="counter">1</div>
+            {/* <div className="counter">1</div> */}
+            {/* <Notification /> */}
           </div>
           <div className="item">
             <ChatBubbleOutlineOutlinedIcon className="icon" />

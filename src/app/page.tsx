@@ -17,6 +17,7 @@ export default function Home({ children }: any) {
       router.push("/login");
     }
   }, [currentUser]);
+
   return (
     <div className={darkMode ? "app dark" : "app"}>
       <h1>Home</h1>

@@ -89,12 +89,13 @@ const Widget = ({ type }: any) => {
       const prevMonth = new Date(new Date().setMonth(today.getMonth() - 2));
 
       const lastMonthQuery = query(
-        collection(db, data.query),
+        collection(db, "users"),
         where("timeStamp", "<=", today),
         where("timeStamp", ">", lastMonth)
       );
+
       const prevMonthQuery = query(
-        collection(db, data.query),
+        collection(db, "users"),
         where("timeStamp", "<=", lastMonth),
         where("timeStamp", ">", prevMonth)
       );
@@ -102,10 +103,18 @@ const Widget = ({ type }: any) => {
       const lastMonthData = await getDocs(lastMonthQuery);
       const prevMonthData = await getDocs(prevMonthQuery);
 
+      console.log(lastMonthData.docs.length);
+      console.log(prevMonthData.docs.length);
+
       setAmount(lastMonthData.docs.length);
       setDiff(
         ((lastMonthData.docs.length - prevMonthData.docs.length) /
           prevMonthData.docs.length) *
+          100
+      );
+      console.log(
+        ((lastMonthData.docs.length - prevMonthData.docs.length) /
+          lastMonthData.docs.length) *
           100
       );
     };
@@ -122,10 +131,10 @@ const Widget = ({ type }: any) => {
         <span className="link">{data.link}</span>
       </div>
       <div className="right">
-        <div className={`percentage ${diff < 0 ? "negative" : "positive"}`}>
+        {/* <div className={`percentage ${diff < 0 ? "negative" : "positive"}`}>
           {diff < 0 ? <KeyboardArrowDownIcon /> : <KeyboardArrowUpIcon />}
           {diff} %
-        </div>
+        </div> */}
         {data.icon}
       </div>
     </div>
